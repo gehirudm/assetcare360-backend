@@ -1,1 +1,11 @@
+/Users/gehirudm/Programming/AssetCare360/assetcare360-backend/src/main/java/com/assetcare360/system/Router.java
 /Users/gehirudm/Programming/AssetCare360/assetcare360-backend/src/main/java/com/assetcare360/App.java
+/Users/gehirudm/Programming/AssetCare360/assetcare360-backend/src/main/java/com/assetcare360/config/DB.java
+/Users/gehirudm/Programming/AssetCare360/assetcare360-backend/src/main/java/com/assetcare360/stores/UserStore.java
+/Users/gehirudm/Programming/AssetCare360/assetcare360-backend/src/main/java/com/assetcare360/controllers/UserController.java
+/Users/gehirudm/Programming/AssetCare360/assetcare360-backend/src/main/java/com/assetcare360/interfaces/Middleware.java
+/Users/gehirudm/Programming/AssetCare360/assetcare360-backend/src/main/java/com/assetcare360/middleware/AuthMiddleware.java
+/Users/gehirudm/Programming/AssetCare360/assetcare360-backend/src/main/java/com/assetcare360/config/Roles.java
+/Users/gehirudm/Programming/AssetCare360/assetcare360-backend/src/main/java/com/assetcare360/controllers/AuthController.java
+/Users/gehirudm/Programming/AssetCare360/assetcare360-backend/src/main/java/com/assetcare360/workers/SessionWorker.java
+/Users/gehirudm/Programming/AssetCare360/assetcare360-backend/src/main/java/com/assetcare360/interfaces/Controller.java
