@@ -1,6 +1,7 @@
 ### Java ###
 # Compiled class files
 *.class
+**/*.class
 
 # Log files
 *.log
