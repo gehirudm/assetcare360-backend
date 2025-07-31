@@ -1,8 +1,8 @@
 package com.assetcare360.factories;
 
-import com.assetcare360.interfaces.Factory;
 import com.assetcare360.models.User;
 import com.assetcare360.system.FactoryManager;
+import com.assetcare360.system.interfaces.Factory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +23,7 @@ public class UserFactory implements Factory<User> {
     @Override
     public User create() {
         User user = new User();
+        user.setEmployeeId("EMP" + randomString(6));
         user.setUsername("user_" + randomString(8));
         user.setEmail(randomString(8) + "@example.com");
         user.setPassword("password_" + randomString(8));
@@ -41,6 +42,9 @@ public class UserFactory implements Factory<User> {
                 Object value = attributes[i + 1];
                 
                 switch (key) {
+                    case "employeeId":
+                        user.setEmployeeId(value.toString());
+                        break;
                     case "username":
                         user.setUsername(value.toString());
                         break;

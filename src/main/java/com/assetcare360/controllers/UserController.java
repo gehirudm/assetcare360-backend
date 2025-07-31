@@ -1,15 +1,14 @@
 package com.assetcare360.controllers;
 
-import com.assetcare360.interfaces.Controller;
 import com.assetcare360.models.User;
 import com.assetcare360.stores.UserStore;
 import com.assetcare360.system.Router;
+import com.assetcare360.system.interfaces.BaseController;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +16,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class UserController implements Controller {
+public class UserController extends BaseController {
     private final UserStore userStore = new UserStore();
     
     @Override
@@ -32,7 +31,7 @@ public class UserController implements Controller {
     private void getAllUsers(HttpExchange exchange) throws IOException {
         try {
             List<User> users = userStore.getAllUsers();
-            String response = convertUsersToJson(users);
+            String response = User.listToJson(users);
             sendJsonResponse(exchange, 200, response);
         } catch (SQLException e) {
             sendJsonResponse(exchange, 500, "{\"error\":\"Database error: " + e.getMessage() + "\"}");
@@ -43,16 +42,13 @@ public class UserController implements Controller {
         String path = exchange.getRequestURI().getPath();
         Pattern pattern = Pattern.compile("/users/(\\d+)");
         Matcher matcher = pattern.matcher(path);
-        
         if (matcher.find()) {
             int id = Integer.parseInt(matcher.group(1));
-            
             try {
                 Optional<User> userOpt = userStore.getUserById(id);
-                
                 if (userOpt.isPresent()) {
                     User user = userOpt.get();
-                    String response = convertUserToJson(user);
+                    String response = user.toJson();
                     sendJsonResponse(exchange, 200, response);
                 } else {
                     sendJsonResponse(exchange, 404, "{\"error\":\"User not found\"}");
@@ -67,12 +63,11 @@ public class UserController implements Controller {
     
     private void createUser(HttpExchange exchange) throws IOException {
         String requestBody = readRequestBody(exchange);
-        User user = parseUserFromJson(requestBody);
-        
+        User user = new User().fromJson(requestBody);
         if (user != null) {
             try {
                 User createdUser = userStore.createUser(user);
-                String response = convertUserToJson(createdUser);
+                String response = createdUser.toJson();
                 sendJsonResponse(exchange, 201, response);
             } catch (SQLException e) {
                 sendJsonResponse(exchange, 500, "{\"error\":\"Database error: " + e.getMessage() + "\"}");
@@ -86,18 +81,14 @@ public class UserController implements Controller {
         String path = exchange.getRequestURI().getPath();
         Pattern pattern = Pattern.compile("/users/(\\d+)");
         Matcher matcher = pattern.matcher(path);
-        
         if (matcher.find()) {
             int id = Integer.parseInt(matcher.group(1));
             String requestBody = readRequestBody(exchange);
-            User user = parseUserFromJson(requestBody);
-            
+            User user = new User().fromJson(requestBody);
             if (user != null) {
                 user.setId(id);
-                
                 try {
                     boolean updated = userStore.updateUser(user);
-                    
                     if (updated) {
                         sendJsonResponse(exchange, 200, "{\"message\":\"User updated successfully\"}");
                     } else {
@@ -144,79 +135,6 @@ public class UserController implements Controller {
         }
     }
     
-    private void sendJsonResponse(HttpExchange exchange, int statusCode, String response) throws IOException {
-        exchange.getResponseHeaders().set("Content-Type", "application/json");
-        exchange.sendResponseHeaders(statusCode, response.length());
-        
-        try (OutputStream os = exchange.getResponseBody()) {
-            os.write(response.getBytes());
-        }
-    }
+    // sendJsonResponse now inherited from BaseController
     
-    // Simple JSON conversion methods - in a real app, use a proper JSON library
-    private String convertUsersToJson(List<User> users) {
-        StringBuilder sb = new StringBuilder("[");
-        for (int i = 0; i < users.size(); i++) {
-            if (i > 0) {
-                sb.append(",");
-            }
-            sb.append(convertUserToJson(users.get(i)));
-        }
-        sb.append("]");
-        return sb.toString();
-    }
-    
-    private String convertUserToJson(User user) {
-        return "{" +
-               "\"id\":" + user.getId() + "," +
-               "\"username\":\"" + user.getUsername() + "\"," +
-               "\"email\":\"" + user.getEmail() + "\"," +
-               "\"role\":\"" + user.getRole() + "\"" +
-               "}";
-    }
-    
-    private User parseUserFromJson(String json) {
-        // This is a very simple JSON parser - in a real app, use a proper JSON library
-        try {
-            User user = new User();
-            
-            // Extract username
-            Pattern usernamePattern = Pattern.compile("\"username\"\\s*:\\s*\"([^\"]+)\"");
-            Matcher usernameMatcher = usernamePattern.matcher(json);
-            if (usernameMatcher.find()) {
-                user.setUsername(usernameMatcher.group(1));
-            }
-            
-            // Extract email
-            Pattern emailPattern = Pattern.compile("\"email\"\\s*:\\s*\"([^\"]+)\"");
-            Matcher emailMatcher = emailPattern.matcher(json);
-            if (emailMatcher.find()) {
-                user.setEmail(emailMatcher.group(1));
-            }
-            
-            // Extract password
-            Pattern passwordPattern = Pattern.compile("\"password\"\\s*:\\s*\"([^\"]+)\"");
-            Matcher passwordMatcher = passwordPattern.matcher(json);
-            if (passwordMatcher.find()) {
-                user.setPassword(passwordMatcher.group(1));
-            }
-            
-            // Extract role
-            Pattern rolePattern = Pattern.compile("\"role\"\\s*:\\s*\"([^\"]+)\"");
-            Matcher roleMatcher = rolePattern.matcher(json);
-                        if (roleMatcher.find()) {
-                user.setRole(roleMatcher.group(1));
-            }
-            
-            // Validate required fields
-            if (user.getUsername() == null || user.getEmail() == null || 
-                user.getPassword() == null || user.getRole() == null) {
-                return null;
-            }
-            
-            return user;
-        } catch (Exception e) {
-            return null;
-        }
-    }
 }

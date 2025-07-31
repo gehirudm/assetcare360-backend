@@ -1,5 +1,5 @@
-INSERT INTO users (username, email, password, role) VALUES
-('admin', 'admin@assetcare360.com', 'hashed_password_here', 'admin'),
-('john_doe', 'john@example.com', 'hashed_password_here', 'user'),
-('jane_smith', 'jane@example.com', 'hashed_password_here', 'manager'),
-('tech_support', 'support@assetcare360.com', 'hashed_password_here', 'support');
+INSERT INTO users (employeeId, username, email, password, role) VALUES
+('EMP0001', 'dana123', 'admin@assetcare360.com', '$2a$10$adminhash', 'admin'),
+('EMP0002', 'chamaath', 'john@example.com', '$2a$10$userhash', 'user'),
+('EMP0003', 'senash_123', 'jane@example.com', '$2a$10$managerhash', 'inventory_manager'),
+('EMP0004', 'ravindu', 'support@assetcare360.com', '$2a$10$supporthash', 'technical_officer');

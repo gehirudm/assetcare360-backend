@@ -3,7 +3,7 @@ package com.assetcare360.system;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.assetcare360.interfaces.Factory;
+import com.assetcare360.system.interfaces.Factory;
 
 /**
  * Manager class for all factories in the application

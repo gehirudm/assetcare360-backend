@@ -1,4 +1,4 @@
-package com.assetcare360.interfaces;
+package com.assetcare360.system.interfaces;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -10,7 +10,7 @@ import java.util.Optional;
  * Base interface for all database models in the application.
  * Provides standard methods for CRUD operations and database interactions.
  */
-public interface Model<T> {
+public interface Model<T> extends JsonSerializable<T> {
     
     /**
      * Saves the current model instance to the database.

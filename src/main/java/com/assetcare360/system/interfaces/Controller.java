@@ -1,4 +1,4 @@
-package com.assetcare360.interfaces;
+package com.assetcare360.system.interfaces;
 
 import com.assetcare360.system.Router;
 

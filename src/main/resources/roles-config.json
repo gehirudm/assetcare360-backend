@@ -1,0 +1,20 @@
+{
+  "admin": [
+    "create_inventory",
+    "delete_inventory",
+    "view_inventory",
+    "view_spare_parts_stock",
+    "manage_users"
+  ],
+  "inventory_manager": [
+    "create_inventory",
+    "delete_inventory",
+    "view_inventory"
+  ],
+  "technical_officer": [
+    "view_spare_parts_stock"
+  ],
+  "user": [
+    "view_inventory"
+  ]
+}

@@ -1,4 +1,4 @@
-package com.assetcare360.system;
+package com.assetcare360.system.db;
 
 import com.assetcare360.config.DB;
 

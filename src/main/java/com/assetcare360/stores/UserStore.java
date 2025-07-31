@@ -1,9 +1,12 @@
+    // ...existing code...
+
+    // ...existing code...
 package com.assetcare360.stores;
 
 import com.assetcare360.models.User;
 import com.assetcare360.system.FactoryManager;
-import com.assetcare360.system.MigrationManager;
-import com.assetcare360.system.SeederManager;
+import com.assetcare360.system.db.MigrationManager;
+import com.assetcare360.system.db.SeederManager;
 import com.assetcare360.factories.UserFactory;
 
 import java.sql.SQLException;
@@ -16,7 +19,7 @@ public class UserStore {
     private final String TABLE_NAME = "users";
     private final MigrationManager migrationManager;
     private final SeederManager seederManager;
-    private final User userModel;
+    final User userModel;
     
     public UserStore() {
         this.migrationManager = new MigrationManager(TABLE_NAME);
@@ -94,5 +97,10 @@ public class UserStore {
         User user = FactoryManager.getFactory(User.class).create(attributes);
         user.save();
         return user;
+    }
+    public List<User> findByEmployeeId(String employeeId) throws SQLException {
+        Map<String, Object> criteria = new HashMap<>();
+        criteria.put("employeeId", employeeId);
+        return userModel.findWhere(criteria);
     }
 }
